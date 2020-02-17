@@ -108,6 +108,7 @@ services:
 
 
 
+
 consumers:
 - username: john
   keyauth_credentials:

@@ -1,5 +1,7 @@
 # API Gateway Kong (DB less Mode) with UI (Konga)
-This project aims to showcase the various capabilities of Kong API Gateway and Konga (Additional UI for Kong). This project uses Kong in DB Less mode using "kong.yml" file 
+This project aims to showcase the various capabilities of Kong API Gateway and Konga (Additional UI for Kong). This project uses Kong in DB Less mode using "kong.yml" file .
+
+## Note: Kong with DB less mode is not recommended since it cannot store dynamic configurations which needs database like "oauth2.0" 
 
 
 ## Kong
