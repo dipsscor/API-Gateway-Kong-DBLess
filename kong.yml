@@ -1,0 +1,142 @@
+_format_version: "1.1"
+
+services:
+- name: Testing-service
+  url: https://jsonplaceholder.typicode.com/  # Upstream server URL
+  path: /API-V1.0/
+  
+  routes:
+  - name: posts
+    paths:
+    - /
+    methods:
+    - GET
+    - POST
+    - DELETE
+    - PUT
+    - PATCH
+    
+  - name: comments
+    paths:
+    - /
+    methods:
+    - GET
+    - POST
+    - DELETE
+    - PUT
+    - PATCH
+    
+  - name: users
+    paths:
+    - /
+    methods:
+    - GET
+    - POST
+    - DELETE
+    - PUT
+    - PATCH
+
+  plugins:  
+# Key Authentication plugin
+  - name: key-auth
+    config:
+      hide_credentials: true # Hide these credentials passing to upstream server
+      key_names:
+      - apikey
+      
+## Basic Authentication Plugin
+#  - name: basic-auth
+#    config:
+#      hide_credentials: true # Hide these credentials passing to upstream server
+      
+      
+# Access control plugin
+  - name: acl
+    config:
+      whitelist:
+      - API Developer
+      - API Admin
+      
+      
+# CORS control plugin      
+  - name: cors
+    config: 
+      origins: 
+      - '*' #List of allowed domains
+      methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+      headers:
+      - Accept
+      - Accept-Version
+      - Content-Length
+      - Content-MD5
+      - Content-Type
+      - Date
+      - X-Auth-Token
+      exposed_headers: 
+      - X-Auth-Token
+      credentials: true
+      max_age: 3600
+      
+      
+# IP Restriction  plugin      
+  - name: ip-restriction
+    config:
+      blacklist: # IP address or CIDR range
+      - 54.13.21.1
+      - 143.1.0.0/24
+      
+      
+# Rate Limiting  plugin      
+  - name: rate-limiting
+    config:
+      minute: 10    # 10 Requests per minute
+      policy: local   #counters will be stored locally in-memory on the node
+      limit_by: consumer    # 10 requests for each consumer
+      
+      
+# Request Size Limiting  plugin      
+  - name: request-size-limiting
+    config:
+      allowed_payload_size: 128    # Allowed request payload size 
+      size_unit: megabytes   #Size unit can be set either in bytes, kilobytes, or megabytes
+
+
+
+
+consumers:
+- username: john
+  keyauth_credentials:
+  - key: E3D62F5AC8341F695966AA1E8DF35
+  basicauth_credentials:
+  - username: johnny
+    password: password
+    
+- username: mike
+  keyauth_credentials:
+  - key: 75748F59A585F6BA386B7DDE7BDEE
+  basicauth_credentials:
+  - username: mikky
+    password: password
+    
+- username: sam
+  keyauth_credentials:
+  - key: C6AF6BE5386228A794FE134BBDB9D
+  basicauth_credentials:
+  - username: sammy
+    password: password
+
+
+
+acls:
+- consumer: john
+  group: API Developer
+- consumer: mike
+  group: API Admin
+- consumer: sam
+  group: ERP
+  
